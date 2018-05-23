@@ -96,7 +96,7 @@ end
 
 % Create output folder
 if ~exist('GannetLoad_output','dir')
-    mkdir GannetLoad_output;
+    if ~strcmpi(MRS_struct.p.vendor,'GE'), mkdir GannetLoad_output; end
 end
 
 
@@ -639,6 +639,7 @@ for ii = 1:numscans % Loop over all files in the batch (from metabfile)
         end
         
         % Save PDF
+        set(gcf,'Visible', 'off');   % don't pop up the figure
         set(gcf,'PaperUnits','inches');
         set(gcf,'PaperSize',[11 8.5]);
         set(gcf,'PaperPosition',[0 0 11 8.5]);
@@ -647,6 +648,7 @@ for ii = 1:numscans % Loop over all files in the batch (from metabfile)
             pdfname = fullfile('GannetLoad_output', [fullpath '_' vox{kk} '_load.pdf']); % MM (180112)
         else
             pdfname = fullfile('GannetLoad_output', [metabfile_nopath '_' vox{kk} '_load.pdf']); % MM (180112)
+            pdfname=['e' num2str(MRS_struct.p.ex_no) '_s' num2str(MRS_struct.p.se_no) '_MRSLoad.pdf'];
         end
         saveas(h, pdfname);
         

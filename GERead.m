@@ -223,6 +223,16 @@ start_recv = hdr_value(rdb_hdr_dab_start_rcv);
 stop_recv = hdr_value(rdb_hdr_dab_stop_rcv);
 nreceivers = (stop_recv - start_recv) + 1;
 
+% CNI: read exam/series number info
+if MRS_struct.p.GE.rdbm_rev_num == 26.002    
+    fseek(fid, 199552, 'bof');  MRS_struct.p.ex_no = fread(fid, 1, 'uint16');          % image_hdr.im_exno
+    fseek(fid, 199564, 'bof');  MRS_struct.p.se_no = fread(fid, 1, 'int16');           % image_hdr.im_seno
+else
+    fseek(fid, 148712, 'bof');  MRS_struct.p.ex_no = fread(fid, 1, 'uint16');          % image_hdr.im_exno
+    fseek(fid, 148724, 'bof');  MRS_struct.p.se_no = fread(fid, 1, 'int16');           % image_hdr.im_seno
+end
+
+
 % RTN 2018
 dataframes = f_hdr_value(rdb_hdr_user4)/nex;
 refframes = f_hdr_value(rdb_hdr_user19);

@@ -56,7 +56,7 @@ MRS_struct.version.fit = '180326';
 lsqopts = optimset('lsqcurvefit');
 lsqopts = optimset(lsqopts,'MaxIter',1e5,'MaxFunEvals',1e5,'TolX',1e-10,'TolFun',1e-10,'Display','off');
 nlinopts = statset('nlinfit');
-nlinopts = statset(nlinopts,'MaxIter',1e5,'MaxFunEvals',1e5,'TolX',1e-10,'TolFun',1e-10);
+nlinopts = statset(nlinopts,'MaxIter',1e5,'MaxFunEvals',1e5,'TolX',1e-10,'TolFun',1e-10,'Display','off');
 
 % Loop over voxels if PRIAM
 for kk = 1:length(vox)
@@ -1063,18 +1063,19 @@ for kk = 1:length(vox)
             end
             
             % Save PDF output
+            set(gcf,'Visible', 'off');   % don't pop up the figure
             set(gcf,'PaperUnits','inches');
             set(gcf,'PaperSize',[11 8.5]);
             set(gcf,'PaperPosition',[0 0 11 8.5]);
             
             if ~exist('GannetFit_output','dir')
-                mkdir GannetFit_output;
+                if ~strcmpi(MRS_struct.p.vendor,'GE'), mkdir GannetFit_output; end
             end
             
             if strcmpi(MRS_struct.p.vendor,'Philips_data')
                 pdfname = fullfile('GannetFit_output', [fullpath '_' target{trg} '_' vox{kk} '_fit.pdf']); % MM (180112)
             else
-                pdfname = fullfile('GannetFit_output', [metabfile_nopath '_' target{trg} '_' vox{kk} '_fit.pdf']); % MM (180112)
+                pdfname=['e' num2str(MRS_struct.p.ex_no) '_s' num2str(MRS_struct.p.se_no) '_MRSfit_' MRS_struct.p.target '.pdf'];
             end            
             saveas(h, pdfname);
             

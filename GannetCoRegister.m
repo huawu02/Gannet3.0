@@ -188,7 +188,7 @@ for ii = 1:numscans
 
         % Create output folder
         if ~exist('GannetCoRegister_output','dir')
-            mkdir GannetCoRegister_output;
+            if ~strcmpi(MRS_struct.p.vendor,'GE'), mkdir GannetCoRegister_output; end
         end
 
         % For Philips .data
@@ -213,7 +213,7 @@ for ii = 1:numscans
         if strcmpi(MRS_struct.p.vendor,'Philips_data')
             pdfname = fullfile('GannetCoRegister_output', [fullpath '_' vox{kk} '_coreg.pdf']); % MM (180112)
         else
-            pdfname = fullfile('GannetCoRegister_output', [metabfile_nopath '_' vox{kk} '_coreg.pdf']); % MM (180112)
+            pdfname = ['e' num2str(MRS_struct.p.ex_no) '_s' num2str(MRS_struct.p.se_no) '_coreg.pdf'];
         end
         saveas(gcf, pdfname);
         
